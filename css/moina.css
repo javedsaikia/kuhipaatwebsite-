@@ -3,10 +3,12 @@
    Visual language borrowed from the page it lives on: 2px black outlines,
    chunky offset shadows instead of blur, 64px pills, rotate(-2deg) accents.
 
-   The launcher is a brand-coloured disc with the face video composited on top
-   in `screen` blend mode. The source footage is a glowing face on pure black,
-   and screen treats black as a no-op, so the black box vanishes and only the
-   glow lands on the orange — a lit face, not a video thumbnail.
+   The launcher is a brand-coloured disc showing the face video. The supplied
+   footage is a glowing face on pure black; the orange is screen-composited
+   into the file itself at build time (see the ffmpeg note in the repo) rather
+   than blended in CSS, because Safari puts <video> on its own hardware layer
+   where `mix-blend-mode` is ignored — which rendered the raw black footage as
+   a black square. Baked pixels look the same everywhere.
    ========================================================================== */
 
 .moina {
@@ -42,11 +44,17 @@
 .moina_launcher:hover { --moina-scale: 1.06; }
 .moina_launcher:active { --moina-scale: .96; }
 
-/* The disc the face sits on. `isolation` keeps the screen blend from reaching
-   the page behind it — which also means the blend can only see backgrounds
-   painted INSIDE this element, so the gradient has to live here rather than on
-   the button. Without it the face composites against nothing and the whole
-   disc renders black. */
+/* The disc the face sits on.
+
+   The orange is baked INTO the video rather than composited in CSS. Safari
+   promotes <video> to its own hardware layer, where `mix-blend-mode` is
+   ignored and an ancestor's `border-radius` doesn't clip — so the old
+   screen-blend approach showed the raw footage as a black square there. The
+   gradient below is now only a fallback for when the video hasn't loaded.
+
+   The mask is the WebKit workaround for that clipping bug: masks are applied
+   in a stage Safari does honour for video, and translateZ promotes the wrapper
+   to its own layer so the clip is rasterised with it. */
 .moina_face-wrap {
   position: relative;
   width: 100%;
@@ -54,14 +62,19 @@
   overflow: hidden;
   border-radius: 50%;
   background: radial-gradient(circle at 50% 38%, var(--papumba-light), var(--papumba) 58%, var(--papumba-dark));
-  isolation: isolate;
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 98%, transparent 100%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 98%, transparent 100%);
+  transform: translateZ(0);
 }
 .moina_face {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* black -> transparent, glow -> lit. see header note */
-  mix-blend-mode: screen;
+  /* belt and braces: Safari clips a radius set on the video itself more
+     reliably than one inherited from an ancestor */
+  border-radius: 50%;
+  /* the face sits in the middle third of the frame; scaling up crops the empty
+     margin so it fills the disc instead of floating small in the centre */
   transform: scale(1.28);
   pointer-events: none;
 }
@@ -175,14 +188,17 @@
   border: 2px solid var(--moina-ink);
   border-radius: 50%;
   background: var(--papumba-dark);
-  isolation: isolate;
+  /* same WebKit video-clipping workaround as the launcher */
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 98%, transparent 100%);
+  mask-image: radial-gradient(circle at 50% 50%, #000 98%, transparent 100%);
+  transform: translateZ(0);
 }
 .moina_head-avatar video,
 .moina_head-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  mix-blend-mode: screen;
+  border-radius: 50%;
   transform: scale(1.28);
 }
 .moina_head-text { flex: 1 1 auto; min-width: 0; line-height: 1.15; }
