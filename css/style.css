@@ -1048,7 +1048,31 @@ html[data-lang="as"] .c-lang-pill[data-active-lang="as"] {
 @media (max-width: 767px) {
   .c-container { padding-inline: 1rem; }
   .c-subtitle-1 { font-size: 1.75rem; line-height: 2.125rem; }
-  .c-hero.cc-home { padding-top: 7rem; padding-bottom: 4.5rem; }
+  /* The hero is 100vh on desktop. On a phone that's a full screen of hero
+     before anything else appears, and 100vh measures the viewport WITHOUT the
+     browser chrome, so the bottom is cut until you scroll. Let the content set
+     the height instead — the next section then peeks above the fold. */
+  .c-hero.cc-home {
+    min-height: auto;
+    padding-top: 7rem;
+    padding-bottom: 4.5rem;
+  }
+  /* The footage is 16:9 landscape. Covering a portrait phone meant scaling it
+     until only ~25% of the frame was left on screen — the "zoomed in" look.
+     `contain` shows the whole frame; the hero gradient fills the rest. */
+  .c-hero_video-wrap { display: flex; align-items: center; }
+  .c-hero_video {
+    position: relative;
+    height: auto;
+    max-height: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    /* Contained footage ends in two hard horizontal lines against the hero
+       gradient, which reads as a stray band. Fading the edges lets it sit in
+       the background the way the covered version used to. */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  }
   .c-hero_sub { font-size: 1.0625rem; }
   /* keep both badges on one line at 360px wide */
   .c-store-badges { gap: .5rem; }
