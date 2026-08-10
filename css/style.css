@@ -258,6 +258,63 @@ html.js [text-split] { opacity: 0; }
 .c-button:hover .c-cta-bg.cc-energy ~ .c-cta-label,
 .c-button:focus-visible .c-cta-bg.cc-energy ~ .c-cta-label { color: var(--black); }
 
+/* — store badges ——————————————————————————————— */
+/* Secondary to .c-button on purpose: same pill silhouette, roughly half the
+   height, so the hero keeps one dominant CTA instead of four equal ones. */
+.c-store-badges {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .75rem;
+}
+
+.c-store-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .625rem;
+  padding: .5rem 1.375rem .5rem 1.125rem;
+  border: 2px solid var(--black);
+  border-radius: 64px;
+  background-color: var(--black);
+  color: var(--white);
+  text-align: left;
+  transition: transform .18s var(--ease-out), border-color .3s, box-shadow .3s;
+}
+.c-store-badge:hover,
+.c-store-badge:focus-visible {
+  transform: translateY(-3px);
+  border-color: var(--papumba);
+  box-shadow: 0 10px 24px rgba(15, 15, 15, .18);
+}
+.c-store-badge:active { transform: translateY(0) scale(.97); }
+
+/* Apple inherits the label colour; the Play mark keeps its own four fills. */
+.c-store-badge_glyph {
+  flex: none;
+  width: 1.625rem;
+  height: 1.625rem;
+  fill: currentColor;
+}
+
+.c-store-badge_text {
+  display: flex;
+  flex-direction: column;
+  gap: .1875rem;
+  line-height: 1;
+}
+.c-store-badge_kicker {
+  font-size: .625rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: .75;
+}
+.c-store-badge_name {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+}
+
 /* — variants —————————————————————————————————— */
 /* Outline buttons don't wipe — papumba recolours border + label to orange. */
 .c-button.cc-secondary,
@@ -448,7 +505,9 @@ html[data-lang="as"] .c-lang-pill[data-active-lang="as"] {
   overflow: hidden;
   min-height: 100vh;
   padding-top: 9rem;
-  padding-bottom: 0;
+  /* reserves the strip the absolutely-positioned .c-arrow-wrapper sits in,
+     so hero content can never grow underneath the scroll cue */
+  padding-bottom: 5.5rem;
   display: flex;
   align-items: center;
   background:
@@ -989,8 +1048,13 @@ html[data-lang="as"] .c-lang-pill[data-active-lang="as"] {
 @media (max-width: 767px) {
   .c-container { padding-inline: 1rem; }
   .c-subtitle-1 { font-size: 1.75rem; line-height: 2.125rem; }
-  .c-hero.cc-home { padding-top: 7rem; }
+  .c-hero.cc-home { padding-top: 7rem; padding-bottom: 4.5rem; }
   .c-hero_sub { font-size: 1.0625rem; }
+  /* keep both badges on one line at 360px wide */
+  .c-store-badges { gap: .5rem; }
+  .c-store-badge { gap: .5rem; padding: .4375rem 1rem .4375rem .875rem; }
+  .c-store-badge_glyph { width: 1.375rem; height: 1.375rem; }
+  .c-store-badge_name { font-size: .9375rem; }
   .c-mascot-wave { width: 8rem; opacity: .9; }
   .c-cards-grid { grid-template-columns: 1fr; }
   .c-home-stat-card { max-width: 18rem; }
