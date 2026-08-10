@@ -811,7 +811,7 @@ html[data-lang="as"] .c-lang-pill[data-active-lang="as"] {
   color: var(--black);
   font-family: inherit;
   font-size: 1.0625rem;
-  font-weight: 600;
+  font-weight: 500; /* matches the placeholder; keeps 600 out of the font payload */
   letter-spacing: -.02em;
 }
 .c-input::placeholder { color: var(--silver-chalice); font-weight: 500; }
