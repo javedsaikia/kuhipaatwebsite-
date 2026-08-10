@@ -12,6 +12,7 @@
 <link rel="preload" href="assets/fonts/plus-jakarta-sans-500-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/fonts.css">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/moina.css">
 </head>
 <body>
 
@@ -573,6 +574,65 @@
   </div>
 </footer>
 
+<!-- ============ MOINA — chat companion ============
+     Hidden until js/moina.js boots, since a chat window without its script is
+     just a dead box. Safety rules live in js/moina-guard.js and are enforced
+     again server-side in api/chat.js. -->
+<div class="moina" id="moina" hidden>
+
+  <div class="moina_panel" role="dialog" aria-label="Chat with Moina" aria-hidden="true">
+    <div class="moina_head">
+      <div class="moina_head-avatar">
+        <video src="assets/moina-face.mp4" poster="assets/moina-face.png"
+               autoplay muted loop playsinline aria-hidden="true"></video>
+      </div>
+      <div class="moina_head-text">
+        <div class="moina_head-name">Moina</div>
+        <div class="moina_head-status">
+          <span class="en">Your bird friend</span><span class="as">তোমাৰ চৰাই বন্ধু</span>
+        </div>
+      </div>
+      <button type="button" class="moina_close" aria-label="Close chat">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6 L18 18 M18 6 L6 18" fill="none" stroke="currentColor"
+                stroke-width="2.6" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="moina_log" role="log" aria-live="polite"></div>
+    <div class="moina_chips"></div>
+
+    <form class="moina_form" autocomplete="off">
+      <input class="moina_input" type="text" aria-label="Message Moina" placeholder="Say something to Moina…">
+      <button type="submit" class="moina_send" aria-label="Send">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 12 L20 12 M13 5 L20 12 L13 19" fill="none" stroke="currentColor"
+                stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </form>
+
+    <p class="moina_foot">
+      <span class="en">Moina is an AI friend. Kids, never share private things.</span>
+      <span class="as">মৈনা এজন AI বন্ধু। ল'ৰা-ছোৱালী, ব্যক্তিগত কথা কাকো নিদিবা।</span>
+    </p>
+  </div>
+
+  <button type="button" class="moina_launcher" aria-expanded="false" aria-label="Chat with Moina">
+    <span class="moina_pulse" aria-hidden="true"></span>
+    <span class="moina_face-wrap">
+      <video class="moina_face" src="assets/moina-face.mp4" poster="assets/moina-face.png"
+             autoplay muted loop playsinline aria-hidden="true"></video>
+    </span>
+    <span class="moina_badge" aria-hidden="true"></span>
+  </button>
+
+  <span class="moina_hint" aria-hidden="true">
+    <span class="en">Hi, I'm Moina!</span><span class="as">নমস্কাৰ, মই মৈনা!</span>
+  </span>
+</div>
+
 <!-- animation stack — the same libraries papumba.com uses, self-hosted.
      Versions and upstream sources: js/vendor/README.md -->
 <script src="js/vendor/lenis.min.js"></script>
@@ -580,5 +640,7 @@
 <script src="js/vendor/ScrollTrigger.min.js"></script>
 <script src="js/vendor/split-type.min.js"></script>
 <script src="js/main.js"></script>
+<script src="js/moina-guard.js"></script>
+<script src="js/moina.js"></script>
 </body>
 </html>

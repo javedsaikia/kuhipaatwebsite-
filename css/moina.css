@@ -1,0 +1,395 @@
+/* ==========================================================================
+   Moina — the chat companion
+   Visual language borrowed from the page it lives on: 2px black outlines,
+   chunky offset shadows instead of blur, 64px pills, rotate(-2deg) accents.
+
+   The launcher is a brand-coloured disc with the face video composited on top
+   in `screen` blend mode. The source footage is a glowing face on pure black,
+   and screen treats black as a no-op, so the black box vanishes and only the
+   glow lands on the orange — a lit face, not a video thumbnail.
+   ========================================================================== */
+
+.moina {
+  --moina-size: 4.75rem;
+  --moina-panel-w: 22.5rem;
+  --moina-ink: #0f0f0f;
+  --moina-shadow: rgba(15, 15, 15, .22);
+  position: fixed;
+  right: 1.75rem;
+  bottom: 1.75rem;
+  z-index: 90;
+}
+
+/* ------------------------------------------------ launcher --------------- */
+.moina_launcher {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--moina-size);
+  height: var(--moina-size);
+  padding: 0;
+  border: 2px solid var(--moina-ink);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 38%, var(--papumba-light), var(--papumba) 58%, var(--papumba-dark));
+  box-shadow: 0 8px 0 var(--papumba-dark), 0 14px 26px var(--moina-shadow);
+  cursor: pointer;
+  /* translate is driven by JS (the cursor magnet); keeping scale on its own
+     property means the two never fight over the transform string */
+  translate: var(--moina-x, 0) var(--moina-y, 0);
+  scale: var(--moina-scale, 1);
+  transition: scale .28s var(--ease-out), box-shadow .28s var(--ease-out);
+}
+.moina_launcher:hover { --moina-scale: 1.06; }
+.moina_launcher:active { --moina-scale: .96; }
+
+/* The disc the face sits on. `isolation` keeps the screen blend from reaching
+   the page behind it — which also means the blend can only see backgrounds
+   painted INSIDE this element, so the gradient has to live here rather than on
+   the button. Without it the face composites against nothing and the whole
+   disc renders black. */
+.moina_face-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 38%, var(--papumba-light), var(--papumba) 58%, var(--papumba-dark));
+  isolation: isolate;
+}
+.moina_face {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* black -> transparent, glow -> lit. see header note */
+  mix-blend-mode: screen;
+  transform: scale(1.28);
+  pointer-events: none;
+}
+
+/* breathing halo, so a parked Moina still reads as alive */
+.moina_pulse {
+  position: absolute;
+  inset: -.375rem;
+  border-radius: 50%;
+  border: 2px solid var(--papumba);
+  opacity: 0;
+  pointer-events: none;
+  animation: moina-pulse 2.8s var(--ease-out) infinite;
+}
+@keyframes moina-pulse {
+  0%   { transform: scale(.92); opacity: .55; }
+  70%  { transform: scale(1.28); opacity: 0; }
+  100% { transform: scale(1.28); opacity: 0; }
+}
+
+/* "Hi, I'm Moina!" nub — shows until the panel has been opened once */
+.moina_hint {
+  position: absolute;
+  right: calc(100% + .75rem);
+  /* anchored to the launcher, not the widget: .moina grows upward when the
+     panel opens, and a top:50% nub would ride up with it */
+  bottom: calc(var(--moina-size) / 2);
+  translate: 0 50%;
+  display: flex;
+  align-items: center;
+  gap: .375rem;
+  padding: .5rem .875rem;
+  border: 2px solid var(--moina-ink);
+  border-radius: 64px;
+  background: var(--white);
+  box-shadow: 0 4px 0 var(--moina-ink);
+  font-size: .8125rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.02em;
+  white-space: nowrap;
+  rotate: -2deg;
+  transition: opacity .3s var(--ease-out), translate .3s var(--ease-out);
+}
+.moina.is-open .moina_hint,
+.moina.is-hint-dismissed .moina_hint {
+  opacity: 0;
+  translate: .5rem 50%;
+  pointer-events: none;
+}
+.moina.is-open .moina_pulse { animation: none; opacity: 0; }
+
+/* unread-style dot when Moina has something to say */
+.moina_badge {
+  position: absolute;
+  top: -.125rem;
+  right: -.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 2px solid var(--moina-ink);
+  border-radius: 50%;
+  background: var(--flamingo);
+  opacity: 0;
+  scale: .4;
+  transition: opacity .25s var(--ease-out), scale .25s var(--ease-out);
+}
+.moina.has-unread .moina_badge { opacity: 1; scale: 1; }
+
+/* ------------------------------------------------ panel ------------------ */
+.moina_panel {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--moina-size) + 1rem);
+  display: flex;
+  flex-direction: column;
+  width: var(--moina-panel-w);
+  max-height: min(32rem, calc(100vh - 9rem));
+  overflow: hidden;
+  border: 2px solid var(--moina-ink);
+  border-radius: 1.75rem;
+  background: var(--white);
+  box-shadow: 0 10px 0 var(--moina-ink), 0 22px 40px var(--moina-shadow);
+  transform-origin: bottom right;
+  opacity: 0;
+  scale: .9;
+  translate: 0 .75rem;
+  visibility: hidden;
+  transition: opacity .26s var(--ease-out), scale .26s var(--ease-out),
+              translate .26s var(--ease-out), visibility .26s;
+}
+.moina.is-open .moina_panel {
+  opacity: 1;
+  scale: 1;
+  translate: 0 0;
+  visibility: visible;
+}
+
+.moina_head {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .875rem 1rem;
+  border-bottom: 2px solid var(--moina-ink);
+  background: var(--papumba);
+}
+.moina_head-avatar {
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  overflow: hidden;
+  border: 2px solid var(--moina-ink);
+  border-radius: 50%;
+  background: var(--papumba-dark);
+  isolation: isolate;
+}
+.moina_head-avatar video,
+.moina_head-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  mix-blend-mode: screen;
+  transform: scale(1.28);
+}
+.moina_head-text { flex: 1 1 auto; min-width: 0; line-height: 1.15; }
+.moina_head-name {
+  font-size: 1.0625rem;
+  font-weight: 800;
+  letter-spacing: -.03em;
+}
+.moina_head-status {
+  display: flex;
+  align-items: center;
+  gap: .3125rem;
+  font-size: .75rem;
+  font-weight: 600;
+  opacity: .8;
+}
+.moina_head-status::before {
+  content: "";
+  width: .4375rem;
+  height: .4375rem;
+  border-radius: 50%;
+  background: #1f8b3b;
+}
+.moina_close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .55);
+  transition: background .2s, transform .2s var(--ease-out);
+}
+.moina_close:hover { background: var(--white); transform: rotate(90deg); }
+.moina_close svg { width: 1rem; height: 1rem; }
+
+/* ------------------------------------------------ log -------------------- */
+.moina_log {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .625rem;
+  background: var(--concrete);
+  scrollbar-width: thin;
+}
+
+.moina_msg {
+  max-width: 85%;
+  padding: .625rem .875rem;
+  border: 2px solid var(--moina-ink);
+  border-radius: 1.125rem;
+  font-size: .9375rem;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -.02em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.moina_msg.cc-bot {
+  align-self: flex-start;
+  border-bottom-left-radius: .375rem;
+  background: var(--white);
+  box-shadow: 0 3px 0 var(--moina-ink);
+}
+.moina_msg.cc-user {
+  align-self: flex-end;
+  border-bottom-right-radius: .375rem;
+  background: var(--malibu);
+  box-shadow: 0 3px 0 var(--malibu-shadow);
+}
+/* guardrail replies read as Moina, just tinted so a parent can spot them */
+.moina_msg.cc-guard {
+  background: var(--energy);
+  box-shadow: 0 3px 0 var(--galliano);
+}
+.moina_msg.cc-error {
+  background: #ffe3dc;
+  box-shadow: 0 3px 0 var(--flamingo-shadow);
+}
+
+.moina_typing {
+  align-self: flex-start;
+  display: flex;
+  gap: .25rem;
+  padding: .75rem .875rem;
+  border: 2px solid var(--moina-ink);
+  border-radius: 1.125rem;
+  border-bottom-left-radius: .375rem;
+  background: var(--white);
+  box-shadow: 0 3px 0 var(--moina-ink);
+}
+.moina_typing span {
+  width: .4375rem;
+  height: .4375rem;
+  border-radius: 50%;
+  background: var(--silver-chalice);
+  animation: moina-blink 1.2s infinite;
+}
+.moina_typing span:nth-child(2) { animation-delay: .18s; }
+.moina_typing span:nth-child(3) { animation-delay: .36s; }
+@keyframes moina-blink {
+  0%, 60%, 100% { opacity: .3; transform: translateY(0); }
+  30%           { opacity: 1;  transform: translateY(-.1875rem); }
+}
+
+/* ------------------------------------------------ chips ------------------ */
+.moina_chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .375rem;
+  padding: 0 1rem .75rem;
+  background: var(--concrete);
+}
+.moina_chip {
+  padding: .4375rem .75rem;
+  border: 2px solid var(--moina-ink);
+  border-radius: 64px;
+  background: var(--white);
+  font-size: .8125rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  transition: background .2s, transform .2s var(--ease-out);
+}
+.moina_chip:hover { background: var(--energy); transform: translateY(-2px); }
+
+/* ------------------------------------------------ composer --------------- */
+.moina_form {
+  display: flex;
+  gap: .5rem;
+  padding: .75rem;
+  border-top: 2px solid var(--moina-ink);
+  background: var(--white);
+}
+.moina_input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: .6875rem 1rem;
+  border: 2px solid var(--moina-ink);
+  border-radius: 64px;
+  background: var(--white);
+  color: var(--moina-ink);
+  font-family: inherit;
+  font-size: .9375rem;
+  font-weight: 500;
+  letter-spacing: -.02em;
+}
+.moina_input::placeholder { color: var(--silver-chalice); }
+.moina_input:focus { outline: none; box-shadow: 0 0 0 3px rgba(255, 156, 0, .45); }
+
+.moina_send {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 2px solid var(--moina-ink);
+  border-radius: 50%;
+  background: var(--papumba);
+  box-shadow: 0 3px 0 var(--papumba-dark);
+  transition: transform .2s var(--ease-out), background .2s;
+}
+.moina_send:hover:not(:disabled) { background: var(--papumba-light); transform: translateY(-2px); }
+.moina_send:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 1px 0 var(--papumba-dark); }
+.moina_send:disabled { opacity: .45; cursor: not-allowed; }
+.moina_send svg { width: 1.125rem; height: 1.125rem; }
+
+.moina_foot {
+  padding: 0 1rem .625rem;
+  background: var(--white);
+  color: var(--silver-chalice);
+  font-size: .6875rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: center;
+  letter-spacing: -.01em;
+}
+
+/* ------------------------------------------------ responsive ------------- */
+@media (max-width: 767px) {
+  .moina {
+    --moina-size: 4rem;
+    right: 1rem;
+    bottom: 1rem;
+  }
+  .moina_panel {
+    position: fixed;
+    right: .75rem;
+    left: .75rem;
+    bottom: calc(var(--moina-size) + 1.5rem);
+    width: auto;
+    max-height: min(28rem, calc(100vh - 8rem));
+  }
+  /* the nub crowds the thumb zone on a phone */
+  .moina_hint { display: none; }
+}
+
+/* ------------------------------------------------ reduced motion --------- */
+@media (prefers-reduced-motion: reduce) {
+  .moina_launcher,
+  .moina_panel,
+  .moina_close,
+  .moina_chip,
+  .moina_send { transition: none; }
+  .moina_pulse,
+  .moina_typing span { animation: none; }
+  .moina_pulse { opacity: 0; }
+}
