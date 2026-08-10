@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<script>document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moina Mel — Learn Assamese the Joyful Way | মইনা মেল</title>
+<meta name="description" content="Moina Mel is a warm, playful bilingual world where Assamese children explore stories, songs, games and culture. Safe, ad-free, made with love.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23FFC93C%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ SVG SPRITE (icons + mascot, reused via <use>) ============ -->
+<svg style="display:none" aria-hidden="true">
+
+  <symbol id="icon-mascot" viewBox="0 0 240 240">
+    <g class="mascot-branch">
+      <rect x="20" y="205" width="200" height="14" rx="7" fill="#8A5A34"/>
+      <path d="M55 205 C40 190 30 190 20 200 C34 198 44 200 55 205 Z" fill="#6BBF59"/>
+      <path d="M185 205 C200 188 212 190 222 198 C206 198 196 200 185 205 Z" fill="#6BBF59"/>
+    </g>
+    <g class="mascot-tail">
+      <path d="M70 150 C40 155 25 140 20 118 C40 128 58 132 78 140 Z" fill="#F2994A"/>
+    </g>
+    <ellipse class="mascot-body" cx="122" cy="150" rx="58" ry="50" fill="#FFB238"/>
+    <path class="mascot-wing" d="M158 118 C185 120 196 145 178 172 C168 178 152 174 148 160 C150 142 152 128 158 118 Z" fill="#F2994A"/>
+    <ellipse class="mascot-belly" cx="118" cy="168" rx="32" ry="26" fill="#FFF3D6"/>
+    <circle class="mascot-head" cx="118" cy="88" r="42" fill="#FFB238"/>
+    <path class="mascot-crest" d="M92 52 C90 38 98 30 104 34 C104 44 100 50 92 52 Z" fill="#F2994A"/>
+    <path class="mascot-crest" d="M108 44 C110 28 120 22 126 28 C124 38 118 44 108 44 Z" fill="#F2994A"/>
+    <path class="mascot-crest" d="M128 50 C134 36 146 34 150 42 C144 50 136 52 128 50 Z" fill="#F2994A"/>
+    <circle class="mascot-cheek" cx="90" cy="98" r="9" fill="#FF9E80" opacity="0.6"/>
+    <circle class="mascot-cheek" cx="148" cy="98" r="9" fill="#FF9E80" opacity="0.6"/>
+    <g class="mascot-eye" style="transform-origin:100px 84px">
+      <circle cx="100" cy="84" r="14" fill="#3A2E20"/>
+      <circle cx="100" cy="84" r="14" fill="#fff" opacity="0.001"/>
+      <circle cx="100" cy="84" r="13" fill="#ffffff"/>
+      <circle cx="103" cy="81" r="6.5" fill="#2E2A26"/>
+      <circle cx="106" cy="78" r="2.2" fill="#ffffff"/>
+    </g>
+    <g class="mascot-eye" style="transform-origin:140px 84px">
+      <circle cx="140" cy="84" r="13" fill="#ffffff"/>
+      <circle cx="143" cy="81" r="6.5" fill="#2E2A26"/>
+      <circle cx="146" cy="78" r="2.2" fill="#ffffff"/>
+    </g>
+    <path class="mascot-beak" d="M112 104 C118 116 126 116 132 104 C126 110 118 110 112 104 Z" fill="#E8590C"/>
+    <path d="M118 100 C121 106 123 106 126 100 C123 103 121 103 118 100 Z" fill="#B8440A"/>
+    <g class="mascot-legs">
+      <line x1="105" y1="196" x2="105" y2="212" stroke="#E8590C" stroke-width="4" stroke-linecap="round"/>
+      <line x1="135" y1="196" x2="135" y2="212" stroke="#E8590C" stroke-width="4" stroke-linecap="round"/>
+      <path d="M96 212 L105 212 L112 218 M105 212 L98 218" stroke="#E8590C" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <path d="M126 212 L135 212 L142 218 M135 212 L128 218" stroke="#E8590C" stroke-width="4" fill="none" stroke-linecap="round"/>
+    </g>
+  </symbol>
+
+  <symbol id="icon-play" viewBox="0 0 48 48">
+    <circle cx="24" cy="24" r="20" fill="none" stroke="currentColor" stroke-width="3.2"/>
+    <path d="M19 15 L34 24 L19 33 Z" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-listen" viewBox="0 0 48 48">
+    <circle cx="15" cy="35" r="6.5" fill="currentColor"/>
+    <circle cx="33" cy="31" r="6.5" fill="currentColor"/>
+    <path d="M21.5 35 V12 L39.5 7 V27" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="icon-book" viewBox="0 0 48 48">
+    <path d="M24 14 C19 9 10 8 5 10 V36 C10 34 19 35 24 40 C29 35 38 34 43 36 V10 C38 8 29 9 24 14 Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+    <line x1="24" y1="14" x2="24" y2="40" stroke="currentColor" stroke-width="3"/>
+  </symbol>
+
+  <symbol id="icon-compass" viewBox="0 0 48 48">
+    <circle cx="24" cy="24" r="19" fill="none" stroke="currentColor" stroke-width="3.2"/>
+    <path d="M31 17 L26 26 L17 31 L22 22 Z" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-leaf" viewBox="0 0 100 100">
+    <path d="M50 6 C82 16 92 52 50 94 C8 52 18 16 50 6 Z" fill="currentColor"/>
+    <path d="M50 18 V82" stroke="rgba(255,255,255,0.55)" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="icon-cloud" viewBox="0 0 100 60">
+    <path d="M22 48 C8 48 6 30 20 27 C21 14 42 10 49 22 C62 13 80 24 74 36 C88 35 89 48 76 48 Z" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-star" viewBox="0 0 40 40">
+    <path d="M20 2 L25 15 L39 15 L28 24 L32 38 L20 30 L8 38 L12 24 L1 15 L15 15 Z" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-shield" viewBox="0 0 48 48">
+    <path d="M24 4 L42 11 V23 C42 35 34 43 24 46 C14 43 6 35 6 23 V11 Z" fill="currentColor"/>
+    <path d="M16 24 L21.5 30 L33 17" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="icon-noads" viewBox="0 0 48 48">
+    <circle cx="24" cy="24" r="19" fill="none" stroke="currentColor" stroke-width="3.4"/>
+    <line x1="11" y1="11" x2="37" y2="37" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="icon-heart" viewBox="0 0 48 48">
+    <path d="M24 42 C10 32 4 22 4 14.5 C4 7 10 3 16 3 C20.5 3 23 5.5 24 9 C25 5.5 27.5 3 32 3 C38 3 44 7 44 14.5 C44 22 38 32 24 42 Z" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-sparkle" viewBox="0 0 48 48">
+    <path d="M24 2 L28 20 L46 24 L28 28 L24 46 L20 28 L2 24 L20 20 Z" fill="currentColor"/>
+  </symbol>
+
+  <symbol id="icon-moon" viewBox="0 0 48 48">
+    <path d="M30 4 C18 6 10 16 10 28 C10 38 18 44 26 44 C34 44 41 39 44 31 C36 35 25 32 20 24 C16 17 19 8 30 4 Z" fill="currentColor"/>
+  </symbol>
+
+</svg>
+
+<!-- floating decorative shapes reused across sections -->
+<div class="bg-decor" aria-hidden="true">
+  <svg class="decor leaf-1"><use href="#icon-leaf"/></svg>
+  <svg class="decor leaf-2"><use href="#icon-leaf"/></svg>
+  <svg class="decor cloud-1"><use href="#icon-cloud"/></svg>
+  <svg class="decor cloud-2"><use href="#icon-cloud"/></svg>
+  <svg class="decor star-1"><use href="#icon-star"/></svg>
+  <svg class="decor star-2"><use href="#icon-star"/></svg>
+  <svg class="decor star-3"><use href="#icon-star"/></svg>
+</div>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ============ HEADER ============ -->
+<header class="site-header" id="top">
+  <div class="container header-inner">
+    <a href="#top" class="logo">
+      <svg class="logo-icon" viewBox="0 0 240 240"><use href="#icon-mascot"/></svg>
+      <span class="logo-text">
+        <span class="en">Moina Mel</span><span class="as">মইনা মেল</span>
+      </span>
+    </a>
+
+    <nav class="main-nav" id="main-nav">
+      <a href="#kids-can-do"><span class="en">What Kids Can Do</span><span class="as">শিশুৱে কি কৰিব পাৰে</span></a>
+      <a href="#why"><span class="en">Why Moina Mel</span><span class="as">কিয় মইনা মেল</span></a>
+      <a href="#parents"><span class="en">For Parents</span><span class="as">অভিভাৱকৰ বাবে</span></a>
+      <a href="#ai-story"><span class="en">AI Stories</span><span class="as">AI কাহিনী</span></a>
+      <a href="#early-access" class="btn btn-primary btn-sm nav-cta">
+        <span class="en">Get Early Access</span><span class="as">আগ্ৰহ প্ৰকাশ কৰক</span>
+      </a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="lang-toggle" id="lang-toggle" type="button" aria-label="Switch language / ভাষা সলনি কৰক">
+        <span class="lang-pill" data-active-lang="en">EN</span>
+        <span class="lang-pill" data-active-lang="as">অস</span>
+      </button>
+      <a href="#early-access" class="btn btn-primary btn-sm">
+        <span class="en">Get Early Access</span><span class="as">আগ্ৰহ প্ৰকাশ কৰক</span>
+      </a>
+      <button class="mobile-menu-toggle" id="mobile-menu-toggle" type="button" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ 1. HERO ============ -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-content reveal">
+        <p class="eyebrow"><span class="en">Learn Assamese the joyful way</span><span class="as">অসমীয়া শিকক আনন্দেৰে</span></p>
+        <h1><span class="en">Moina Mel</span><span class="as">মইনা মেল</span></h1>
+        <p class="hero-tags">
+          <span class="en">Stories • Songs • Games • Culture</span>
+          <span class="as">কাহিনী • গীত • খেল • সংস্কৃতি</span>
+        </p>
+        <p class="hero-sub">
+          <span class="en">Safe. Ad-free. Made with love for Assamese children.</span>
+          <span class="as">সুৰক্ষিত। বিজ্ঞাপনমুক্ত। অসমীয়া শিশুৰ বাবে ভালপোৱাৰে সৃষ্টি।</span>
+        </p>
+        <div class="hero-cta">
+          <a href="#kids-can-do" class="btn btn-primary btn-lg">
+            <span class="en">Explore Moina Mel</span><span class="as">মইনা মেল অন্বেষণ কৰক</span>
+          </a>
+          <a href="#early-access" class="btn btn-outline btn-lg">
+            <span class="en">Get Early Access</span><span class="as">আগ্ৰহ প্ৰকাশ কৰক</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal">
+        <div class="hero-blob"></div>
+        <svg class="hero-mascot" viewBox="0 0 240 240"><use href="#icon-mascot"/></svg>
+        <svg class="decor hero-leaf" viewBox="0 0 100 100"><use href="#icon-leaf"/></svg>
+        <svg class="decor hero-star" viewBox="0 0 40 40"><use href="#icon-star"/></svg>
+        <svg class="decor hero-sparkle" viewBox="0 0 48 48"><use href="#icon-sparkle"/></svg>
+      </div>
+    </div>
+    <svg class="wave-divider" viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,40 C240,100 480,0 720,40 C960,80 1200,20 1440,50 L1440,100 L0,100 Z" fill="#FFFDF7"/></svg>
+  </section>
+
+  <!-- ============ 2. TRUST BAR ============ -->
+  <section class="trust-bar reveal">
+    <div class="container">
+      <p class="trust-headline">
+        <span class="en">Trusted by families who want their children to grow up proud of Assamese</span>
+        <span class="as">অসমীয়াৰ প্ৰতি গৌৰৱান্বিত হৈ ডাঙৰ হোৱাটো বিচৰা পৰিয়ালসকলৰ বিশ্বাসৰ পাত্ৰ</span>
+      </p>
+      <div class="trust-badges">
+        <span class="badge"><svg class="icon"><use href="#icon-shield"/></svg>
+          <span class="en">100% Safe</span><span class="as">১০০% সুৰক্ষিত</span>
+        </span>
+        <span class="badge"><svg class="icon"><use href="#icon-noads"/></svg>
+          <span class="en">No Ads</span><span class="as">কোনো বিজ্ঞাপন নাই</span>
+        </span>
+        <span class="badge"><svg class="icon"><use href="#icon-heart"/></svg>
+          <span class="en">Only Assamese &amp; English</span><span class="as">কেৱল অসমীয়া আৰু ইংৰাজী</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3. WHAT KIDS CAN DO ============ -->
+  <section id="kids-can-do" class="kids-can-do">
+    <div class="container">
+      <p class="eyebrow center reveal"><span class="en">A world to play in</span><span class="as">খেলিবলৈ এখন জগত</span></p>
+      <h2 class="section-title center reveal"><span class="en">What Kids Can Do</span><span class="as">শিশুৱে কি কৰিব পাৰে</span></h2>
+
+      <div class="cards-grid">
+        <article class="card reveal card-sun">
+          <div class="card-icon"><svg class="icon"><use href="#icon-play"/></svg></div>
+          <h3><span class="en">Play</span><span class="as">খেলক</span></h3>
+          <p><span class="en">Fun games and quizzes that teach Assamese through play.</span>
+             <span class="as">খেলৰ জৰিয়তে অসমীয়া শিকক।</span></p>
+        </article>
+
+        <article class="card reveal card-sky">
+          <div class="card-icon"><svg class="icon"><use href="#icon-listen"/></svg></div>
+          <h3><span class="en">Listen</span><span class="as">শুনক</span></h3>
+          <p><span class="en">Beautiful Assamese songs, rhymes and audio stories.</span>
+             <span class="as">সুন্দৰ অসমীয়া গীত, ছড়া আৰু শ্ৰৱণযোগ্য কাহিনী।</span></p>
+        </article>
+
+        <article class="card reveal card-leaf">
+          <div class="card-icon"><svg class="icon"><use href="#icon-book"/></svg></div>
+          <h3><span class="en">Read &amp; Create</span><span class="as">পঢ়ক আৰু সৃষ্টি কৰক</span></h3>
+          <p><span class="en">Illustrated Assamese stories. Kids can even create their own.</span>
+             <span class="as">চিত্ৰিত অসমীয়া কাহিনী। শিশুৱে নিজৰ কাহিনীও সৃষ্টি কৰিব পাৰে।</span></p>
+        </article>
+
+        <article class="card reveal card-grape">
+          <div class="card-icon"><svg class="icon"><use href="#icon-compass"/></svg></div>
+          <h3><span class="en">Explore</span><span class="as">অন্বেষণ কৰক</span></h3>
+          <p><span class="en">Discover Assamese festivals, nature, food and everyday life.</span>
+             <span class="as">অসমীয়া উৎসৱ, প্ৰকৃতি, খাদ্য আৰু দৈনন্দিন জীৱন আৱিষ্কাৰ কৰক।</span></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4. WHY MOINA MEL ============ -->
+  <section id="why" class="why-moina">
+    <div class="container why-inner">
+      <div class="why-visual reveal">
+        <div class="why-blob"></div>
+        <svg class="why-leaf-big icon-leaf-color" viewBox="0 0 100 100"><use href="#icon-leaf"/></svg>
+        <svg class="decor why-star" viewBox="0 0 40 40"><use href="#icon-star"/></svg>
+        <svg class="decor why-cloud" viewBox="0 0 100 60"><use href="#icon-cloud"/></svg>
+      </div>
+      <div class="why-content reveal">
+        <p class="eyebrow"><span class="en">Why Moina Mel</span><span class="as">কিয় মইনা মেল</span></p>
+        <h2><span class="en">Learn Assamese the joyful way.</span><span class="as">অসমীয়া শিকক আনন্দেৰে।</span></h2>
+        <p class="lead">
+          <span class="en">We believe every Assamese child deserves to feel proud of their language and culture. Moina Mel turns screen time into joyful learning time — full of stories, songs, and friendly characters that kids love to return to.</span>
+          <span class="as">আমি বিশ্বাস কৰোঁ যে প্ৰতিজন অসমীয়া শিশুৱে নিজৰ ভাষা আৰু সংস্কৃতিৰ প্ৰতি গৌৰৱ অনুভৱ কৰা উচিত। মইনা মেলে স্ক্ৰীন টাইমক আনন্দময় শিক্ষণৰ সময়লৈ ৰূপান্তৰিত কৰে — কাহিনী, গীত আৰু বন্ধুত্বপূৰ্ণ চৰিত্ৰৰে ভৰপূৰ, যিবোৰলৈ শিশুৱে বাৰে বাৰে উভতি আহিব বিচাৰে।</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 5. FOR PARENTS ============ -->
+  <section id="parents" class="for-parents">
+    <div class="container">
+      <div class="parents-card reveal">
+        <div class="parents-icons">
+          <span class="mini-icon"><svg class="icon"><use href="#icon-shield"/></svg></span>
+          <span class="mini-icon"><svg class="icon"><use href="#icon-noads"/></svg></span>
+          <span class="mini-icon"><svg class="icon"><use href="#icon-heart"/></svg></span>
+        </div>
+        <p class="eyebrow center"><span class="en">For Parents</span><span class="as">অভিভাৱকৰ বাবে</span></p>
+        <h2 class="center"><span class="en">Safe. Ad-free. Designed with care.</span><span class="as">সুৰক্ষিত। বিজ্ঞাপনমুক্ত। যত্নৰে সৃষ্টি।</span></h2>
+        <p class="lead center">
+          <span class="en">Give your child the gift of Assamese in a way they will actually enjoy. Perfect for families in Assam and across the diaspora.</span>
+          <span class="as">আপোনাৰ সন্তানক অসমীয়া ভাষাৰ উপহাৰ দিয়ক — এনেদৰে যিটো তেওঁলোকে সঁচাকৈয়ে উপভোগ কৰিব। অসমত আৰু প্ৰবাসত থকা পৰিয়ালসকলৰ বাবে উপযুক্ত।</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6. AI STORY FEATURE ============ -->
+  <section id="ai-story" class="ai-story">
+    <div class="container ai-story-inner">
+      <div class="ai-story-content reveal">
+        <p class="eyebrow"><svg class="icon icon-inline"><use href="#icon-sparkle"/></svg>
+          <span class="en">AI Story Magic</span><span class="as">AI কাহিনী জাদু</span>
+        </p>
+        <h2><span class="en">Create your own Assamese bedtime stories</span><span class="as">নিজৰ অসমীয়া শোৱাৰ কাহিনী সৃষ্টি কৰক</span></h2>
+        <p class="lead">
+          <span class="en">With AI, children and parents can create personalised Assamese stories together.</span>
+          <span class="as">AI-ৰ সহায়ত শিশু আৰু অভিভাৱকে একেলগে ব্যক্তিগত অসমীয়া কাহিনী বনাব পাৰে।</span>
+        </p>
+      </div>
+      <div class="ai-story-visual reveal">
+        <div class="story-mockup">
+          <svg class="icon icon-moon"><use href="#icon-moon"/></svg>
+          <svg class="decor mockup-star-1" viewBox="0 0 40 40"><use href="#icon-star"/></svg>
+          <svg class="decor mockup-star-2" viewBox="0 0 40 40"><use href="#icon-star"/></svg>
+          <svg class="decor mockup-sparkle" viewBox="0 0 48 48"><use href="#icon-sparkle"/></svg>
+          <div class="story-lines">
+            <span></span><span></span><span class="short"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 7. FINAL CTA ============ -->
+  <section id="early-access" class="final-cta">
+    <div class="container">
+      <svg class="cta-mascot" viewBox="0 0 240 240"><use href="#icon-mascot"/></svg>
+      <p class="eyebrow center on-dark"><span class="en">Join us</span><span class="as">আমাৰ লগত যোগ দিয়ক</span></p>
+      <h2 class="center on-dark"><span class="en">Learn Assamese the joyful way</span><span class="as">অসমীয়া শিকক আনন্দেৰে</span></h2>
+      <p class="lead center on-dark"><span class="en">Join the Moina Mel family today.</span><span class="as">আজিয়েই মইনা মেল পৰিয়ালত যোগদান কৰক।</span></p>
+
+      <form class="early-access-form" id="early-access-form" novalidate>
+        <label class="sr-only" for="ea-name"><span class="en">Your name</span><span class="as">আপোনাৰ নাম</span></label>
+        <input type="text" id="ea-name" name="name" class="ea-input" autocomplete="name"
+               data-ph-en="Your name" data-ph-as="আপোনাৰ নাম" required>
+
+        <label class="sr-only" for="ea-email"><span class="en">Your email</span><span class="as">আপোনাৰ ইমেইল</span></label>
+        <input type="email" id="ea-email" name="email" class="ea-input" autocomplete="email"
+               data-ph-en="Your email" data-ph-as="আপোনাৰ ইমেইল" required>
+
+        <button type="submit" class="btn btn-primary btn-lg">
+          <span class="en">Get Early Access</span><span class="as">আগ্ৰহ প্ৰকাশ কৰক</span>
+        </button>
+      </form>
+      <p class="form-success" id="form-success" hidden>
+        <span class="en">🎉 Thank you! We'll be in touch soon.</span>
+        <span class="as">🎉 ধন্যবাদ! আমি সোনকালেই যোগাযোগ কৰিম।</span>
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <a href="#top" class="logo">
+      <svg class="logo-icon" viewBox="0 0 240 240"><use href="#icon-mascot"/></svg>
+      <span class="logo-text"><span class="en">Moina Mel</span><span class="as">মইনা মেল</span></span>
+    </a>
+    <p class="footer-tag">
+      <span class="en">Learn Assamese the joyful way</span>
+      <span class="as">অসমীয়া শিকক আনন্দেৰে</span>
+    </p>
+    <nav class="footer-nav">
+      <a href="#kids-can-do"><span class="en">What Kids Can Do</span><span class="as">শিশুৱে কি কৰিব পাৰে</span></a>
+      <a href="#why"><span class="en">Why Moina Mel</span><span class="as">কিয় মইনা মেল</span></a>
+      <a href="#parents"><span class="en">For Parents</span><span class="as">অভিভাৱকৰ বাবে</span></a>
+      <a href="#ai-story"><span class="en">AI Stories</span><span class="as">AI কাহিনী</span></a>
+    </nav>
+    <p class="footer-note">
+      <span class="en">Made with ❤️ for Assamese children</span>
+      <span class="as">অসমীয়া শিশুৰ বাবে ভালপোৱাৰে সৃষ্টি ❤️</span>
+    </p>
+    <p class="footer-copy">© <span id="year"></span> Moina Mel · Kuhipaat</p>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
