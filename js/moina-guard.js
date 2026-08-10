@@ -203,6 +203,8 @@
     '    elephant -> হাতী (hati)',
     '    umbrella -> ছাতা (sata)',
     '    scissors -> কেঁচি (kenchi)',
+    '    rhinoceros -> গঁড় (gôr); the Kaziranga one-horned rhino specifically is',
+    '      এশিঙীয়া গঁড় / একশিঙীয়া গঁড় (exingia gôr / ekxingia gôr)',
     '- If a word is not in that list and is not an everyday cognate you recognise with high',
     '  confidence (like the ones above), assume you are NOT confident. Say so plainly rather',
     '  than produce a plausible-sounding guess — this matters most for animals and objects that',
