@@ -1,8 +1,10 @@
-# API keys — never commit these
-.env
-.env.local
-.env.*.local
+# API keys — never commit these.
+# `vercel link` appends .env* / .vercel of its own accord; the negation keeps
+# the checked-in template visible.
+.env*
+!.env.example
 
 .DS_Store
 node_modules/
+.vercel
 .vercel/

@@ -1074,12 +1074,22 @@ html[data-lang="as"] .c-lang-pill[data-active-lang="as"] {
     mask-image: linear-gradient(to bottom, transparent 0%, #000 18%, #000 82%, transparent 100%);
   }
   .c-hero_sub { font-size: 1.0625rem; }
-  /* keep both badges on one line at 360px wide */
-  .c-store-badges { gap: .5rem; }
+  /* Stack rather than wrap. English pills are wide enough to wrap on their own,
+     but the Assamese labels are ~20px narrower and both fit on one row — which
+     pushed the row's right edge from 273 to 336 and put the mascot 56px
+     underneath it. Forcing a column keeps the badge block a predictable
+     centred width in both languages, so the mascot's corner stays clear. */
+  .c-store-badges { gap: .5rem; flex-direction: column; align-items: center; }
   .c-store-badge { gap: .5rem; padding: .4375rem 1rem .4375rem .875rem; }
   .c-store-badge_glyph { width: 1.375rem; height: 1.375rem; }
   .c-store-badge_name { font-size: .9375rem; }
-  .c-mascot-wave { width: 8rem; opacity: .9; }
+  /* The store badges are a centred 171px column, and .c-hero_inner sits at
+     z-index 3 against the mascot wrapper's 2 — so at 8rem the bird ran 46px
+     under the Google Play pill and got painted over. Tuck it into the ~102px
+     strip to the right of that column instead. 5.5rem leaves ~10px of daylight,
+     which the wave animation (±2deg about the feet, ~3px of swing) stays
+     inside. */
+  .c-mascot-wave { width: 5.5rem; inset: auto 0 1.25rem auto; opacity: .9; }
   .c-cards-grid { grid-template-columns: 1fr; }
   .c-home-stat-card { max-width: 18rem; }
   .c-story-mockup { padding: 1.75rem; border-radius: 2rem; }
