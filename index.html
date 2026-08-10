@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <script>document.documentElement.classList.add('js');</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moina Mel — Learn Assamese the Joyful Way | মইনা মেল</title>
+<title>Kuhipaat EduTech — Learn Assamese the Joyful Way | কুহিপাট এডুক্টেক</title>
 <meta name="description" content="Moina Mel is a warm, playful bilingual world where Assamese children explore stories, songs, games and culture. Safe, ad-free, made with love.">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22%23FF9C00%22/></svg>">
+<link rel="icon" href="assets/kuhipat-logo.svg" type="image/svg+xml">
 <!-- self-hosted fonts; no third-party font requests. see assets/fonts/README.md -->
 <link rel="preload" href="assets/fonts/plus-jakarta-sans-800-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/plus-jakarta-sans-500-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -120,10 +120,7 @@
 <header class="c-nav" id="top">
   <div class="c-container c-nav_inner">
     <a href="#top" class="c-logo">
-      <svg class="c-logo_icon" viewBox="0 0 240 240" aria-hidden="true"><use href="#icon-mascot"/></svg>
-      <span class="c-logo_text">
-        <span class="en">Moina Mel</span><span class="as">মইনা মেল</span>
-      </span>
+      <img class="c-logo_icon" src="assets/kuhipat-logo-main.svg" alt="Kuhipaat EduTech logo" aria-hidden="true">
     </a>
 
     <nav class="c-nav_menu" id="nav-menu">
@@ -159,6 +156,13 @@
     <svg class="c-decor cc-leaf-2" viewBox="0 0 100 100" aria-hidden="true"><use href="#icon-leaf"/></svg>
     <svg class="c-decor cc-star-1" viewBox="0 0 40 40" aria-hidden="true"><use href="#icon-star"/></svg>
     <svg class="c-decor cc-star-2" viewBox="0 0 40 40" aria-hidden="true"><use href="#icon-star"/></svg>
+
+    <div class="c-hero_video-wrap" aria-hidden="true">
+      <video class="c-hero_video" autoplay muted loop playsinline>
+        <source media="(max-width: 767px)" srcset="assets/hero-bg-mobile.mp4" type="video/mp4">
+        <source src="assets/hero-bg.mp4" type="video/mp4">
+      </video>
+    </div>
 
     <div class="c-hero_mascot-wrapper" aria-hidden="true">
       <svg class="c-mascot-wave" viewBox="0 0 240 240"><use href="#icon-mascot"/></svg>
@@ -312,6 +316,14 @@
       <div class="c-cards-grid">
         <article class="c-card cc-orange" data-reveal>
           <span class="c-card_icon"><svg class="icon" aria-hidden="true"><use href="#icon-play"/></svg></span>
+
+          <div class="c-card_video-wrap" aria-hidden="true">
+            <video class="c-card_video" autoplay muted loop playsinline>
+              <source src="assets/card-play-mobile.mp4" media="(max-width: 767px)" type="video/mp4">
+              <source src="assets/card-play.mp4" type="video/mp4">
+            </video>
+          </div>
+
           <h3><span class="en">Play</span><span class="as">খেলক</span></h3>
           <p><span class="en">Fun games and quizzes that teach Assamese through play.</span>
              <span class="as">খেলৰ জৰিয়তে অসমীয়া শিকক।</span></p>
@@ -346,7 +358,12 @@
     <div class="c-container c-split cc-reverse">
       <div class="c-split_visual" data-reveal>
         <span class="c-blob cc-malibu"></span>
-        <svg class="c-mascot-big" viewBox="0 0 240 240" aria-hidden="true"><use href="#icon-mascot"/></svg>
+        <div class="c-split_video-wrap" aria-hidden="true">
+          <video class="c-split_video" autoplay muted loop playsinline>
+            <source media="(max-width: 767px)" srcset="assets/mascot-video-mobile.mp4" type="video/mp4">
+            <source src="assets/mascot-video.mp4" type="video/mp4">
+          </video>
+        </div>
       </div>
 
       <div class="c-split_content">
@@ -478,8 +495,8 @@
 <footer class="c-footer">
   <div class="c-container c-footer_inner">
     <a href="#top" class="c-logo">
-      <svg class="c-logo_icon" viewBox="0 0 240 240" aria-hidden="true"><use href="#icon-mascot"/></svg>
-      <span class="c-logo_text"><span class="en">Moina Mel</span><span class="as">মইনা মেল</span></span>
+      <img class="c-logo_icon" src="assets/kuhipat-logo-main.svg" alt="" aria-hidden="true">
+      <span class="c-logo_text"><span class="en">Kuhipaat EduTech</span><span class="as">কুহিপাট এডুক্টেক</span></span>
     </a>
 
     <p class="c-footer_tag">
@@ -498,7 +515,7 @@
       <span class="en">Made with ❤️ for Assamese children</span>
       <span class="as">অসমীয়া শিশুৰ বাবে ভালপোৱাৰে সৃষ্টি ❤️</span>
     </p>
-    <p class="c-footer_copy">© <span id="year"></span> Moina Mel · Kuhipaat</p>
+    <p class="c-footer_copy">© <span id="year"></span> Kuhipaat EduTech · Kuhipaat</p>
   </div>
 </footer>
 
