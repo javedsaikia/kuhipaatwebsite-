@@ -6,6 +6,26 @@ const { verifyTurnstile } = require('./turnstile-verify');
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 const MAX_NAME = 80;
 const MIN_NAME = 2;
+/* Inbox for early-access inquiries only — we never email the visitor back. */
+const WAITLIST_INBOX = 'kuhipaatedu@gmail.com';
+
+function waitlistInbox() {
+  return WAITLIST_INBOX;
+}
+
+function hasResendDelivery() {
+  return Boolean(String(process.env.RESEND_API_KEY || '').trim());
+}
+
+function hasWebhookDelivery() {
+  return Boolean(String(process.env.WAITLIST_WEBHOOK_URL || '').trim());
+}
+
+function mustPersistSignup() {
+  /* On Vercel, do not pretend success unless delivery is configured. */
+  if (process.env.VERCEL) return true;
+  return hasWebhookDelivery() || hasResendDelivery();
+}
 
 const RECENT = new Map(); /* email → timestamp, per-instance duplicate guard */
 
@@ -27,9 +47,13 @@ function isDuplicateEmail(email) {
   return false;
 }
 
-async function forwardWebhook(payload) {
+async function forwardWebhook(record) {
   const url = process.env.WAITLIST_WEBHOOK_URL;
   if (!url) return { forwarded: false };
+  const payload = {
+    ...record,
+    inbox: waitlistInbox()
+  };
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -44,9 +68,7 @@ async function forwardWebhook(payload) {
 
 async function notifyResend(record) {
   const key = process.env.RESEND_API_KEY;
-  const to = process.env.WAITLIST_NOTIFY_EMAIL;
-  if (!key || !to) return { sent: false };
-
+  if (!key) return { sent: false };
   const from = process.env.WAITLIST_FROM_EMAIL || 'Moina Mel Waitlist <onboarding@resend.dev>';
 
   const res = await fetch('https://api.resend.com/emails', {
@@ -57,14 +79,15 @@ async function notifyResend(record) {
     },
     body: JSON.stringify({
       from,
-      to: [to],
-      subject: 'New Moina Mel waitlist: ' + record.name,
+      to: [waitlistInbox()],
+      subject: 'Early access request: ' + record.name,
       text: [
-        'New early-access signup',
+        'Someone requested early access on kuhipaatwebsite.',
+        '',
         'Name: ' + record.name,
-        'Email: ' + record.email,
+        'Their email: ' + record.email,
         'Language: ' + record.lang,
-        'Time: ' + record.at
+        'Submitted: ' + record.at
       ].join('\n')
     })
   });
@@ -77,10 +100,10 @@ async function notifyResend(record) {
 }
 
 async function persistSignup(record) {
-  const webhook = await forwardWebhook(record);
-  const resendCfg = Boolean(process.env.RESEND_API_KEY && process.env.WAITLIST_NOTIFY_EMAIL);
+  let webhook = { forwarded: false };
+  if (hasWebhookDelivery()) webhook = await forwardWebhook(record);
   let resend = { sent: false };
-  if (resendCfg) resend = await notifyResend(record);
+  if (hasResendDelivery()) resend = await notifyResend(record);
 
   if (webhook.forwarded || resend.sent) {
     return { stored: true };
@@ -150,8 +173,7 @@ module.exports = async function handler(req, res) {
   };
 
   try {
-    const mustStore = Boolean(process.env.WAITLIST_WEBHOOK_URL) ||
-      Boolean(process.env.RESEND_API_KEY && process.env.WAITLIST_NOTIFY_EMAIL);
+    const mustStore = mustPersistSignup();
     const result = await persistSignup(record);
     if (mustStore && !result.stored) {
       return res.status(503).json({ error: 'storage_not_configured', lang });
