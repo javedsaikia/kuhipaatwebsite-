@@ -36,6 +36,25 @@ const PORT = Number(process.env.PORT || 8000);
 })();
 
 const chat = require(path.join(ROOT, 'api', 'chat.js'));
+const waitlist = require(path.join(ROOT, 'api', 'waitlist.js'));
+const siteConfig = require(path.join(ROOT, 'api', 'site-config.js'));
+
+function readJsonBody(req, res, next) {
+  let raw = '';
+  req.on('data', chunk => {
+    raw += chunk;
+    if (raw.length > 1e6) req.destroy();
+  });
+  req.on('end', () => {
+    let parsed = null;
+    try { parsed = JSON.parse(raw || '{}'); } catch (err) { parsed = null; }
+    const s = shim(req, res, parsed);
+    Promise.resolve(next(s.req, s.res)).catch(err => {
+      console.error('[moina-dev]', err);
+      if (!res.writableEnded) s.res.status(500).json({ error: 'handler threw' });
+    });
+  });
+}
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -94,22 +113,30 @@ function serveStatic(req, res) {
   });
 }
 
+const API_POST = {
+  '/api/chat': chat,
+  '/api/waitlist': waitlist
+};
+
+function runApi(handler, req, res, body) {
+  const s = shim(req, res, body);
+  Promise.resolve(handler(s.req, s.res)).catch(err => {
+    console.error('[moina-dev]', err);
+    if (!res.writableEnded) s.res.status(500).json({ error: 'handler threw' });
+  });
+}
+
 http.createServer((req, res) => {
-  if (req.url.split('?')[0] === '/api/chat') {
-    let raw = '';
-    req.on('data', chunk => {
-      raw += chunk;
-      if (raw.length > 1e6) req.destroy();          // nobody needs a 1MB question
-    });
-    req.on('end', () => {
-      let parsed = null;
-      try { parsed = JSON.parse(raw || '{}'); } catch (err) { parsed = null; }
-      const s = shim(req, res, parsed);
-      Promise.resolve(chat(s.req, s.res)).catch(err => {
-        console.error('[moina-dev]', err);
-        if (!res.writableEnded) s.res.status(500).json({ error: 'handler threw' });
-      });
-    });
+  const pathname = req.url.split('?')[0];
+
+  if (pathname === '/api/site-config' && req.method === 'GET') {
+    runApi(siteConfig, req, res, null);
+    return;
+  }
+
+  const handler = API_POST[pathname];
+  if (handler) {
+    readJsonBody(req, res, handler);
     return;
   }
   serveStatic(req, res);

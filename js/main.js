@@ -20,6 +20,7 @@
   if (hasST) gsap.registerPlugin(ScrollTrigger);
 
   var lenis = null;
+  var navScrollTick = null;
 
   /* ============================================================ 1. Lenis  */
   function initSmoothScroll() {
@@ -39,6 +40,7 @@
       gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
       gsap.ticker.lagSmoothing(0);
       window.__lenis = lenis; // handle for debugging / programmatic scrolling
+      if (navScrollTick) lenis.on('scroll', navScrollTick);
     } else {
       requestAnimationFrame(function raf(time) {
         lenis.raf(time);
@@ -126,6 +128,12 @@
 
       var pieces = fx.unit === 'char' ? split.chars : split.words;
       if (!pieces || !pieces.length) return;
+
+      /* Letter/word spans are visual only; one label for screen readers. */
+      if (!el.getAttribute('aria-label')) {
+        el.setAttribute('aria-label', el.textContent.replace(/\s+/g, ' ').trim());
+      }
+      pieces.forEach(function (piece) { piece.setAttribute('aria-hidden', 'true'); });
 
       gsap.set(el, { opacity: 1 });
 
@@ -320,31 +328,125 @@
       link.addEventListener('click', closeNav);
     });
 
-    var onScroll = function () {
+    /* Lenis scrolls via rAF; native scroll events can lag or not fire. */
+    navScrollTick = function () {
       nav.classList.toggle('is-scrolled', window.scrollY > 20);
     };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    navScrollTick();
+    window.addEventListener('scroll', navScrollTick, { passive: true });
+    if (lenis) lenis.on('scroll', navScrollTick);
   }
 
   /* ============================================= 9. form + year  */
   function initForm() {
     var form = document.getElementById('early-access-form');
     var success = document.getElementById('form-success');
+    var errBox = document.getElementById('form-error');
+    var submitBtn = document.getElementById('ea-submit');
     if (!form) return;
+
+    var sending = false;
+
+    function showFormError(kind) {
+      if (!errBox) return;
+      errBox.hidden = false;
+      errBox.querySelectorAll('[data-error]').forEach(function (el) {
+        el.hidden = kind !== el.getAttribute('data-error');
+      });
+      var generic = errBox.querySelectorAll(':scope > .en, :scope > .as');
+      for (var i = 0; i < generic.length; i++) {
+        if (!generic[i].hasAttribute('data-error')) {
+          generic[i].hidden = !!kind;
+        }
+      }
+    }
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (sending) return;
+      if (errBox) {
+        errBox.hidden = true;
+        errBox.querySelectorAll('[data-error]').forEach(function (el) { el.hidden = true; });
+      }
+
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
       }
-      // No backend wired up yet — swap this for a real signup endpoint
-      // (e.g. Mailchimp, ConvertKit, or a custom API) when ready.
-      form.hidden = true;
-      if (success) success.hidden = false;
-      if (hasST) ScrollTrigger.refresh();
+
+      var turnstileRequired = window.__waitlistTurnstileRequired === true;
+      var token = window.__waitlistTurnstileToken ? window.__waitlistTurnstileToken() : '';
+      if (turnstileRequired && !token) {
+        showFormError('captcha');
+        return;
+      }
+
+      var lang = root.getAttribute('data-lang') === 'as' ? 'as' : 'en';
+      var payload = {
+        lang: lang,
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        website: form.website ? form.website.value.trim() : '',
+        turnstileToken: token
+      };
+
+      sending = true;
+      if (submitBtn) submitBtn.disabled = true;
+
+      fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (data) {
+            return { res: res, data: data };
+          });
+        })
+        .then(function (out) {
+          if (out.res.ok) {
+            form.hidden = true;
+            if (success) success.hidden = false;
+            if (hasST) ScrollTrigger.refresh();
+            return;
+          }
+          if (out.res.status === 403 && out.data && out.data.error === 'captcha_failed') {
+            showFormError('captcha');
+            if (window.__waitlistTurnstileReset) window.__waitlistTurnstileReset();
+          } else {
+            showFormError(null);
+          }
+        })
+        .catch(function () {
+          showFormError(null);
+        })
+        .finally(function () {
+          sending = false;
+          if (submitBtn) submitBtn.disabled = false;
+        });
     });
+  }
+
+  /* Safari ignores <source media> inside <video>; pick the right file in JS. */
+  function initResponsiveVideos() {
+    var mq = window.matchMedia('(max-width: 767px)');
+    function pick() {
+      document.querySelectorAll('video').forEach(function (video) {
+        var sources = Array.prototype.slice.call(video.querySelectorAll('source[src]'));
+        if (!sources.length) return;
+        var mobile = sources.filter(function (s) { return s.getAttribute('media'); });
+        var desktop = sources.filter(function (s) { return !s.getAttribute('media'); });
+        var chosen = (mq.matches && mobile.length ? mobile[0] : desktop[0]) || sources[0];
+        var src = chosen.getAttribute('src');
+        if (!src || video.dataset.responsiveSrc === src) return;
+        video.src = src;
+        video.dataset.responsiveSrc = src;
+        video.load();
+      });
+    }
+    pick();
+    if (mq.addEventListener) mq.addEventListener('change', pick);
+    else if (mq.addListener) mq.addListener(pick);
   }
 
   function initYear() {
@@ -362,6 +464,7 @@
     initReveals();
     initStickyStats();
     initParallax();
+    initResponsiveVideos();
     initForm();
     initYear();
 

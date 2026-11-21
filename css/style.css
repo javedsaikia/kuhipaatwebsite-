@@ -177,9 +177,12 @@ html[data-lang="as"] h3 {
   letter-spacing: -.01em;
 }
 /* Assamese script needs more vertical room than Latin */
-html[data-lang="as"] h1 { line-height: 1.25; }
-html[data-lang="as"] h2 { line-height: 1.3; }
-html[data-lang="as"] .c-subtitle-1 { line-height: 1.35; }
+html[data-lang="as"] h1 { line-height: 1.35; }
+html[data-lang="as"] h2 { line-height: 1.38; }
+html[data-lang="as"] h3 { line-height: 1.4; }
+html[data-lang="as"] .c-subtitle-1 { line-height: 1.45; }
+html[data-lang="as"] .c-lead,
+html[data-lang="as"] p { line-height: 1.65; }
 
 /* ------------------------------------------------ 5. layout -------------- */
 .c-container {
@@ -627,6 +630,8 @@ html[data-lang="as"] .c-lang-pill[data-active-lang="as"] {
   gap: 1rem;
   padding-right: 1rem;
   animation: marquee-left 32s linear infinite;
+  will-change: transform;
+  transform: translateZ(0);
 }
 .c-marquee.cc-reverse .c-marquee_content { animation-name: marquee-right; }
 @keyframes marquee-left  { from { transform: translateX(0); }     to { transform: translateX(-100%); } }
@@ -951,6 +956,48 @@ html[data-lang="as"] .c-lang-pill[data-active-lang="as"] {
 .c-input::placeholder { color: var(--silver-chalice); font-weight: 500; }
 .c-input:focus { outline: none; border-color: var(--white); box-shadow: 0 0 0 4px rgba(255, 255, 255, .55); }
 
+.hp-field {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.c-form-error {
+  width: 100%;
+  margin: 0;
+  color: var(--error);
+  font-size: .9375rem;
+  font-weight: 600;
+  text-align: center;
+}
+.c-form-error [data-error] { display: none; }
+.c-form-error [data-error]:not([hidden]) { display: block; }
+
+.c-turnstile-wrap {
+  width: 100%;
+  max-width: 24.0625rem;
+  margin-inline: auto;
+  min-height: 4.5rem;
+}
+
+.c-footer_legal {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem 1.5rem;
+  margin-bottom: .75rem;
+}
+.c-footer_legal a {
+  font-size: .875rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
 .c-form-success {
   margin-top: 1.5rem;
   font-size: 1.25rem;
@@ -1104,6 +1151,7 @@ html[data-lang="as"] .c-lang-pill[data-active-lang="as"] {
     animation-iteration-count: 1 !important;
     transition-duration: .001ms !important;
   }
+  .c-marquee_content { animation: none !important; transform: none !important; }
   html.js [text-split] { opacity: 1 !important; }
   /* collapse the pinned scroll section to normal flow */
   .c-section.cc-home-stats { height: auto; }

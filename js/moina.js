@@ -60,7 +60,8 @@
       thinking: 'Moina is thinking…',
       offline: "Moina is having a little nap right now. Try again in a moment! 💤",
       capped: "Phew, we've chatted a lot today! Let's take a little break. 🌿",
-      tooFast: 'One at a time! 🐦'
+      tooFast: 'One at a time! 🐦',
+      rateLimited: "We've had lots of chats — try again in a little while! 🐦"
     },
     as: {
       greeting: 'নমস্কাৰ! মই মৈনা, তোমাৰ চৰাই বন্ধু। 🐦 অসমীয়া শব্দ, গীত বা কাহিনীৰ বিষয়ে সোধা!',
@@ -69,7 +70,8 @@
       thinking: 'মৈনাই ভাবি আছে…',
       offline: 'মৈনাই এতিয়া অলপ টোপনি গৈছে। অলপ পিছত চেষ্টা কৰা! 💤',
       capped: 'উফ, আজি বহুত কথা পাতিলোঁ! অলপ জিৰণি লওঁ আহা। 🌿',
-      tooFast: 'এবাৰত এটাকৈ! 🐦'
+      tooFast: 'এবাৰত এটাকৈ! 🐦',
+      rateLimited: 'আজি বহুত কথা পাতিলোঁ — অলপ পিছত চেষ্টা কৰা! 🐦'
     }
   };
 
@@ -151,6 +153,28 @@
     window.addEventListener('blur', function () { tx = 0; ty = 0; kickMagnet(); });
   }
 
+  function focusablesWithin(node) {
+    return Array.prototype.filter.call(
+      node.querySelectorAll('button, [href], input, textarea, [tabindex]:not([tabindex="-1"])'),
+      function (item) { return !item.disabled && item.tabIndex !== -1; }
+    );
+  }
+
+  function onPanelKeydown(e) {
+    if (!open || e.key !== 'Tab') return;
+    var items = focusablesWithin(panel);
+    if (!items.length) return;
+    var first = items[0];
+    var last = items[items.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
   /* ============================================================ panel ==== */
   function setOpen(next) {
     open = next;
@@ -165,9 +189,11 @@
 
       tx = 0; ty = 0; kickMagnet();          // return home before she freezes
       if (!history.length) greet();
+      document.addEventListener('keydown', onPanelKeydown);
       // let the panel finish expanding before yanking focus into it
       setTimeout(function () { input.focus(); }, 280);
     } else {
+      document.removeEventListener('keydown', onPanelKeydown);
       launcher.focus();
     }
   }
@@ -275,6 +301,7 @@
       })
     })
       .then(function (res) {
+        if (res.status === 429) throw new Error('HTTP 429');
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
       })
@@ -293,16 +320,20 @@
       .catch(function (err) {
         hideTyping();
         setBusy(false);
-        addMessage('error', t('offline'));
+        if (err && err.message === 'HTTP 429') {
+          addMessage('error', t('rateLimited'));
+        } else {
+          addMessage('error', t('offline'));
+        }
         // Most likely cause by far: the static host has no /api/chat function.
         console.warn('[moina] chat request failed:', err.message,
-          '\nIs the proxy running? Locally: node tools/moina-dev-proxy.mjs');
+          '\nIs the proxy running? Locally: node tools/moina-dev-proxy.js');
       });
   }
 
   /* ============================================================ wire ===== */
   launcher.addEventListener('click', function () { setOpen(!open); });
-  closeBtn.addEventListener('click', function () { setOpen(false); });
+  if (closeBtn) closeBtn.addEventListener('click', function () { setOpen(false); });
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -321,7 +352,14 @@
   // panel switches its own furniture too.
   new MutationObserver(function () {
     input.placeholder = t('placeholder');
+    input.setAttribute('aria-label', t('placeholder'));
     if (chipWrap.children.length) renderChips();
+    var dialog = document.getElementById('moina-dialog');
+    if (dialog) {
+      dialog.setAttribute('aria-label', lang() === 'as'
+        ? 'মৈনাৰ লগত চেট কৰক'
+        : 'Chat with Moina');
+    }
   }).observe(root, { attributes: true, attributeFilter: ['data-lang'] });
 
   input.placeholder = t('placeholder');

@@ -23,6 +23,7 @@
 'use strict';
 
 const guard = require('../js/moina-guard.js');
+const { rateLimit } = require('./rate-limit');
 
 const PROVIDER = (process.env.MOINA_PROVIDER || 'groq').toLowerCase();
 
@@ -231,6 +232,16 @@ module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ error: 'method not allowed' });
+  }
+
+  const rl = rateLimit(req, {
+    key: 'chat',
+    max: Number(process.env.CHAT_RATE_MAX || 40),
+    windowMs: 60 * 60 * 1000
+  });
+  if (!rl.allowed) {
+    res.setHeader('Retry-After', '3600');
+    return res.status(429).json({ error: 'too_many_requests' });
   }
 
   let body = req.body;

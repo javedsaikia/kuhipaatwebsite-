@@ -2,11 +2,24 @@
 <html lang="en" data-lang="en">
 <head>
 <meta charset="UTF-8">
-<script>document.documentElement.classList.add('js');</script>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Kuhipaat EduTech — Learn Assamese the Joyful Way | কুহিপাট এডুক্টেক</title>
 <meta name="description" content="Moina Mel is a warm, playful bilingual world where Assamese children explore stories, songs, games and culture. Safe, ad-free, made with love.">
+<meta name="theme-color" content="#ff9c00">
+<link rel="canonical" href="https://kuhipaatwebsite.vercel.app/">
 <link rel="icon" href="assets/kuhipat-logo.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kuhipaatwebsite.vercel.app/">
+<meta property="og:title" content="Kuhipaat EduTech — Moina Mel">
+<meta property="og:description" content="Learn Assamese through stories, songs, games and culture. Safe, ad-free, made with love for Assamese children.">
+<meta property="og:image" content="https://kuhipaatwebsite.vercel.app/assets/moina-face.png">
+<meta property="og:locale" content="en_IN">
+<meta property="og:locale:alternate" content="as_IN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kuhipaat EduTech — Moina Mel">
+<meta name="twitter:description" content="Learn Assamese the joyful way with Moina Mel.">
+<meta name="twitter:image" content="https://kuhipaatwebsite.vercel.app/assets/moina-face.png">
+<script src="js/boot.js"></script>
 <!-- self-hosted fonts; no third-party font requests. see assets/fonts/README.md -->
 <link rel="preload" href="assets/fonts/plus-jakarta-sans-800-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/plus-jakarta-sans-500-latin.woff2" as="font" type="font/woff2" crossorigin>
@@ -133,8 +146,8 @@
 <!-- ============ NAV ============ -->
 <header class="c-nav" id="top">
   <div class="c-container c-nav_inner">
-    <a href="#top" class="c-logo">
-      <img class="c-logo_icon" src="assets/kuhipat-logo-main.svg" alt="Kuhipaat EduTech logo" aria-hidden="true">
+    <a href="#top" class="c-logo" aria-label="Kuhipaat EduTech — home">
+      <img class="c-logo_icon" src="assets/kuhipat-logo-main.svg" alt="" width="128" height="128" fetchpriority="high" decoding="async" aria-hidden="true">
     </a>
 
     <nav class="c-nav_menu" id="nav-menu">
@@ -172,7 +185,7 @@
     <svg class="c-decor cc-star-2" viewBox="0 0 40 40" aria-hidden="true"><use href="#icon-star"/></svg>
 
     <div class="c-hero_video-wrap" aria-hidden="true">
-      <video class="c-hero_video" autoplay muted loop playsinline>
+      <video class="c-hero_video" autoplay muted loop playsinline preload="metadata">
         <source src="assets/hero-bg-mobile.mp4" media="(max-width: 767px)" type="video/mp4">
         <source src="assets/hero-bg.mp4" type="video/mp4">
       </video>
@@ -349,7 +362,7 @@
           <span class="c-card_icon"><svg class="icon" aria-hidden="true"><use href="#icon-play"/></svg></span>
 
           <div class="c-card_video-wrap" aria-hidden="true">
-            <video class="c-card_video" autoplay muted loop playsinline preload="auto">
+            <video class="c-card_video" autoplay muted loop playsinline preload="metadata">
               <source src="assets/card-play-mobile.mp4" media="(max-width: 767px)" type="video/mp4">
               <source src="assets/card-play.mp4" type="video/mp4">
             </video>
@@ -364,7 +377,7 @@
           <span class="c-card_icon"><svg class="icon" aria-hidden="true"><use href="#icon-listen"/></svg></span>
 
           <div class="c-card_video-wrap" aria-hidden="true">
-            <video class="c-card_video" autoplay muted loop playsinline preload="auto">
+            <video class="c-card_video" autoplay muted loop playsinline preload="metadata">
               <source src="assets/card-listen-mobile.mp4" media="(max-width: 767px)" type="video/mp4">
               <source src="assets/card-listen.mp4" type="video/mp4">
             </video>
@@ -379,7 +392,7 @@
           <span class="c-card_icon"><svg class="icon" aria-hidden="true"><use href="#icon-book"/></svg></span>
 
           <div class="c-card_video-wrap" aria-hidden="true">
-            <video class="c-card_video" autoplay muted loop playsinline preload="auto">
+            <video class="c-card_video" autoplay muted loop playsinline preload="metadata">
               <source src="assets/card-read-mobile.mp4" media="(max-width: 767px)" type="video/mp4">
               <source src="assets/card-read.mp4" type="video/mp4">
             </video>
@@ -394,7 +407,7 @@
           <span class="c-card_icon"><svg class="icon" aria-hidden="true"><use href="#icon-compass"/></svg></span>
 
           <div class="c-card_video-wrap" aria-hidden="true">
-            <video class="c-card_video" autoplay muted loop playsinline preload="auto">
+            <video class="c-card_video" autoplay muted loop playsinline preload="metadata">
               <source src="assets/card-explore-mobile.mp4" media="(max-width: 767px)" type="video/mp4">
               <source src="assets/card-explore.mp4" type="video/mp4">
             </video>
@@ -522,16 +535,32 @@
         </p>
       </div>
 
-      <form class="c-form" id="early-access-form" novalidate>
+      <form class="c-form" id="early-access-form" novalidate action="/api/waitlist" method="post">
         <label class="sr-only" for="ea-name"><span class="en">Your name</span><span class="as">আপোনাৰ নাম</span></label>
         <input type="text" id="ea-name" name="name" class="c-input" autocomplete="name"
-               data-ph-en="Your name" data-ph-as="আপোনাৰ নাম" required>
+               data-ph-en="Your name" data-ph-as="আপোনাৰ নাম" required minlength="2" maxlength="80"
+               aria-describedby="form-error">
 
         <label class="sr-only" for="ea-email"><span class="en">Your email</span><span class="as">আপোনাৰ ইমেইল</span></label>
-        <input type="email" id="ea-email" name="email" class="c-input" autocomplete="email"
-               data-ph-en="Your email" data-ph-as="আপোনাৰ ইমেইল" required>
+        <input type="email" id="ea-email" name="email" class="c-input" autocomplete="email" inputmode="email"
+               data-ph-en="Your email" data-ph-as="আপোনাৰ ইমেইল" required maxlength="254"
+               aria-describedby="form-error">
 
-        <button type="submit" class="c-button cc-submit">
+        <div class="hp-field" aria-hidden="true">
+          <label for="ea-website">Website</label>
+          <input type="text" id="ea-website" name="website" class="c-input" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="c-turnstile-wrap" id="ea-turnstile" hidden></div>
+
+        <p class="c-form-error" id="form-error" role="alert" hidden>
+          <span class="en">Something went wrong. Please try again.</span>
+          <span class="as">কিবা ভুল হ'ল। পুনৰ চেষ্টা কৰক।</span>
+          <span class="en" data-error="captcha" hidden>Please complete the security check below.</span>
+          <span class="as" data-error="captcha" hidden>তলৰ সুৰক্ষা পৰীক্ষাটো সম্পূৰ্ণ কৰক।</span>
+        </p>
+
+        <button type="submit" class="c-button cc-submit" id="ea-submit">
           <span class="c-cta-bg cc-energy"></span>
           <span class="c-cta-label"><span class="en">Get Early Access</span><span class="as">আগ্ৰহ প্ৰকাশ কৰক</span></span>
         </button>
@@ -550,7 +579,7 @@
 <footer class="c-footer">
   <div class="c-container c-footer_inner">
     <a href="#top" class="c-logo">
-      <img class="c-logo_icon" src="assets/kuhipat-logo-main.svg" alt="" aria-hidden="true">
+      <img class="c-logo_icon" src="assets/kuhipat-logo-main.svg" alt="" width="128" height="128" fetchpriority="high" decoding="async" aria-hidden="true">
       <span class="c-logo_text"><span class="en">Kuhipaat EduTech</span><span class="as">কুহিপাট এডুক্টেক</span></span>
     </a>
 
@@ -566,6 +595,10 @@
       <a href="#ai-story"><span class="en">AI Stories</span><span class="as">AI কাহিনী</span></a>
     </nav>
 
+    <nav class="c-footer_legal" aria-label="Legal">
+      <a href="privacy.html"><span class="en">Privacy Policy</span><span class="as">গোপনীয়তা নীতি</span></a>
+      <a href="terms.html"><span class="en">Terms of Service</span><span class="as">সেৱাৰ চৰ্ত</span></a>
+    </nav>
     <p class="c-footer_note">
       <span class="en">Made with ❤️ for Assamese children</span>
       <span class="as">অসমীয়া শিশুৰ বাবে ভালপোৱাৰে সৃষ্টি ❤️</span>
@@ -580,14 +613,15 @@
      again server-side in api/chat.js. -->
 <div class="moina" id="moina" hidden>
 
-  <div class="moina_panel" role="dialog" aria-label="Chat with Moina" aria-hidden="true">
+  <div class="moina_panel" role="dialog" aria-modal="true" id="moina-dialog"
+       aria-labelledby="moina-dialog-title" aria-hidden="true">
     <div class="moina_head">
       <div class="moina_head-avatar">
         <video src="assets/moina-face.mp4" poster="assets/moina-face.png"
                autoplay muted loop playsinline aria-hidden="true"></video>
       </div>
       <div class="moina_head-text">
-        <div class="moina_head-name">Moina</div>
+        <div class="moina_head-name" id="moina-dialog-title">Moina</div>
         <div class="moina_head-status">
           <span class="en">Your bird friend</span><span class="as">তোমাৰ চৰাই বন্ধু</span>
         </div>
@@ -635,12 +669,13 @@
 
 <!-- animation stack — the same libraries papumba.com uses, self-hosted.
      Versions and upstream sources: js/vendor/README.md -->
-<script src="js/vendor/lenis.min.js"></script>
-<script src="js/vendor/gsap.min.js"></script>
-<script src="js/vendor/ScrollTrigger.min.js"></script>
-<script src="js/vendor/split-type.min.js"></script>
-<script src="js/main.js"></script>
-<script src="js/moina-guard.js"></script>
-<script src="js/moina.js"></script>
+<script src="js/vendor/lenis.min.js" defer></script>
+<script src="js/vendor/gsap.min.js" defer></script>
+<script src="js/vendor/ScrollTrigger.min.js" defer></script>
+<script src="js/vendor/split-type.min.js" defer></script>
+<script src="js/turnstile-waitlist.js" defer></script>
+<script src="js/main.js" defer></script>
+<script src="js/moina-guard.js" defer></script>
+<script src="js/moina.js" defer></script>
 </body>
 </html>
