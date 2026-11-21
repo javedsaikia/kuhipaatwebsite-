@@ -69,34 +69,40 @@ async function forwardWebhook(record) {
 async function notifyResend(record) {
   const key = process.env.RESEND_API_KEY;
   if (!key) return { sent: false };
-  const from = process.env.WAITLIST_FROM_EMAIL || 'Moina Mel Waitlist <onboarding@resend.dev>';
+  const domain = String(process.env.RESEND_EMAIL_DOMAIN || '').trim();
+  const fromCandidates = [];
+  if (process.env.WAITLIST_FROM_EMAIL) fromCandidates.push(process.env.WAITLIST_FROM_EMAIL);
+  if (domain) fromCandidates.push(`Moina Mel Waitlist <waitlist@${domain}>`);
+  fromCandidates.push('Moina Mel Waitlist <onboarding@resend.dev>');
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: 'Bearer ' + key,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      from,
-      to: [waitlistInbox()],
-      subject: 'Early access request: ' + record.name,
-      text: [
-        'Someone requested early access on kuhipaatwebsite.',
-        '',
-        'Name: ' + record.name,
-        'Their email: ' + record.email,
-        'Language: ' + record.lang,
-        'Submitted: ' + record.at
-      ].join('\n')
-    })
-  });
+  const body = {
+    to: [waitlistInbox()],
+    subject: 'Early access request: ' + record.name,
+    text: [
+      'Someone requested early access on kuhipaatwebsite.',
+      '',
+      'Name: ' + record.name,
+      'Their email: ' + record.email,
+      'Language: ' + record.lang,
+      'Submitted: ' + record.at
+    ].join('\n')
+  };
 
-  if (!res.ok) {
-    const text = await res.text().catch(() => '');
-    throw new Error('resend ' + res.status + ': ' + text.slice(0, 120));
+  let lastErr = '';
+  for (const from of fromCandidates) {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + key,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ...body, from })
+    });
+    if (res.ok) return { sent: true };
+    lastErr = await res.text().catch(() => '');
+    if (res.status !== 422 && res.status !== 403) break;
   }
-  return { sent: true };
+  throw new Error('resend: ' + lastErr.slice(0, 120));
 }
 
 async function persistSignup(record) {
